@@ -15,6 +15,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
+import CloudQueueIcon from '@material-ui/icons/CloudQueue';
+
 function App() {
   return (
     <div className="App">
@@ -61,13 +64,17 @@ function App() {
             <div className="box">
               <h1>Cek Penyebaran <span>Virus Covid19</span></h1>
               <div className="desc_head">
-                <span>
-                  icon
-                  Update terakhir 20 Maret 2020
+                <span className="item">
+                  <QueryBuilderIcon className="icon"/>
+                  <span className="text">
+                    Update terakhir 20 Maret 2020
+                  </span>
                 </span>
-                <span>
-                  icon
-                  Sumber data dari Badan Nasional Penanggulangan Bencana
+                <span className="item">
+                  <CloudQueueIcon className="icon"/>
+                  <span className="text">
+                    Sumber data dari Badan Nasional Penanggulangan Bencana
+                  </span>
                 </span>
               </div>
               <h2>Indonesia</h2>
@@ -83,17 +90,17 @@ function App() {
                   </li>
                   <li>
                     <span className="label">Sembuh</span>
-                    <span className="value">450 Orang</span>
+                    <span className="value" style={{color:"#4f8d6d"}}>450 Orang</span>
                   </li>
                   <li>
                     <span className="label">Meninggal</span>
-                    <span className="value">450 Orang</span>
+                    <span className="value" style={{color:"#c9515b"}}>450 Orang</span>
                   </li>
                 </ul>
               </div>
             </div>
             <div className="spreading-list">
-              <h1>Daftar Provinsi yang Terkonfirmasi</h1>
+              <h1>Daftar Provinsi yang <span>Terkonfirmasi</span></h1>
               <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                   <TableHead>
