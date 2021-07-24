@@ -53,6 +53,18 @@ app.get("/indonesia/hospitals", async (req, res) => {
   }
 });
 
+app.get("/indonesia/vaccines", async (req, res) => {
+  try {
+    const result = await fetch(
+      "https://vaksincovid19-api.vercel.app/api/vaksin"
+    );
+    const item = await result.json();
+    res.json(item);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.listen(1234, function () {
   console.log("listening on 1234");
 });

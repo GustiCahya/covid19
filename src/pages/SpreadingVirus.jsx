@@ -3,6 +3,7 @@ import "./SpreadingVirus.scss";
 import axios from 'axios';
 
 import addSeparator from "@utils/addSeparator";
+import convertCommaToDot from '@utils/convertCommaToDot';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,13 +16,11 @@ import Paper from '@material-ui/core/Paper';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import CloudQueueIcon from '@material-ui/icons/CloudQueue';
 
-import convertCommaToDot from '@utils/convertCommaToDot';
 
 export default function SpreadingVirus({displayProvinces, getProvinces, getTableRef}) {
   //! Logic for Spreading Virus Page
   // Ref
   let tableRef = React.useRef(null);
-  console.log(displayProvinces);
   // Country
   const [country, setCountry] = React.useState();
   React.useEffect(() => {

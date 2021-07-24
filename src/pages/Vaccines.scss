@@ -1,0 +1,9 @@
+form{
+    div{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    input{
+        margin-left: 5px;
+    }
+}
