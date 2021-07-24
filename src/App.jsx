@@ -2,7 +2,6 @@ import React from 'react';
 import './App.scss';
 
 import addSeparator from "@utils/addSeparator";
-import fetch from "@services/fetch";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -39,14 +38,21 @@ function App() {
     setOpenSidebar(matches);
   }, [matches]);
   // Logic
-  const [country, setCountry] = React.useState();
+  const [country, setCountry] = React.useState({});
   React.useEffect(() => {
     async function fetchData(){
-      const data = await fetch("https://api.kawalcorona.com/indonesia/");
+      let data = {
+        positif: "",
+        dirawat: "",
+        meninggal: "",
+        sembuh: ""
+      }
+      const response = await fetch("https://api.kawalcorona.com/indonesia/");
+      data = await response.json();
       setCountry(data);
     }
     fetchData();
-  });
+  }, []);
   return (
     <div className="App">
       <div className="sidebar" style={openSidebar ? {left: '0'} : {left: '-100%'}}>
@@ -110,19 +116,19 @@ function App() {
                 <ul>
                   <li>
                     <span className="label">Terkonfirmasi</span>
-                    <span className="value">450 Orang</span>
+                    <span className="value">{addSeparator(country?.positif)} Orang</span>
                   </li>
                   <li>
                     <span className="label">Perawatan</span>
-                    <span className="value">450 Orang</span>
+                    <span className="value">{addSeparator(country?.dirawat)} Orang</span>
                   </li>
                   <li>
                     <span className="label">Sembuh</span>
-                    <span className="value" style={{color:"#4f8d6d"}}>450 Orang</span>
+                    <span className="value" style={{color:"#4f8d6d"}}>{addSeparator(country?.sembuh)} Orang</span>
                   </li>
                   <li>
                     <span className="label">Meninggal</span>
-                    <span className="value" style={{color:"#c9515b"}}>450 Orang</span>
+                    <span className="value" style={{color:"#c9515b"}}>{addSeparator(country?.meninggal)} Orang</span>
                   </li>
                 </ul>
               </div>
