@@ -1,0 +1,18 @@
+{
+    "plugins": [
+      ["module-resolver", {
+        "root": ["./src"],
+        "alias": {
+            "@assets": "./src/assets",
+            "@components": "./src/components",
+            "@atoms": "./src/components/atoms",
+            "@molecules": "./src/components/molecules",
+            "@organisms": "./src/components/organisms",
+            "@routes": "./src/routes",
+            "@pages": "./src/pages",
+            "@services": "./src/services",
+            "@utils": "./src/utils"
+        }
+      }]
+    ]
+  }
