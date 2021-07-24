@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.scss';
 
+import addSeparator from "@utils/addSeparator";
+import fetch from "@services/fetch";
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,7 +13,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
-import addSeparator from "@utils/addSeparator";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -18,14 +20,40 @@ import SearchIcon from '@material-ui/icons/Search';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import CloudQueueIcon from '@material-ui/icons/CloudQueue';
 
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PeopleIcon from '@material-ui/icons/People';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import IconButton from '@material-ui/core/IconButton';
+
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 function App() {
+  // View
+  const matches = useMediaQuery('(min-width:800px)');
+  const [bottomNav, setBottomNav] = React.useState();
+  const [openSidebar, setOpenSidebar] = React.useState(matches);
+  React.useEffect(() => {
+    setOpenSidebar(matches);
+  }, [matches]);
+  // Logic
+  const [country, setCountry] = React.useState();
+  React.useEffect(() => {
+    async function fetchData(){
+      const data = await fetch("https://api.kawalcorona.com/indonesia/");
+      setCountry(data);
+    }
+    fetchData();
+  });
   return (
     <div className="App">
-      <div className="sidebar">
-        <div className="search-province">
+      <div className="sidebar" style={openSidebar ? {left: '0'} : {left: '-100%'}}>
+        <div className="search">
           <h2>Cari Provinsi</h2>
           <TextField
-            id="searchProvince"
+            id="search"
             placeholder="Cari"
             InputProps={{
               startAdornment: (
@@ -43,7 +71,7 @@ function App() {
               <div className="number">1.</div>
               <div className="item">
                 <span className="title">Rumah Sakit</span>
-                <Button variant="contained" size="small" color="primary">
+                <Button variant="outlined" size="small" color="primary">
                   Daftar
                 </Button>
               </div>
@@ -131,6 +159,29 @@ function App() {
           </div>
         </div>
       </div>
+      <div className="fab-search">
+        <IconButton 
+          color="primary" 
+          aria-label="search"
+          onClick={() => {
+            setOpenSidebar((prevItem) => !prevItem)
+          }}
+        >
+          <SearchIcon />
+        </IconButton>
+      </div>
+      <BottomNavigation
+        value={bottomNav}
+        onChange={(event, newValue) => {
+          setBottomNav(newValue);
+        }}
+        showLabels
+        className="bottom-nav"
+      >
+        <BottomNavigationAction label="Penyebaran Virus" icon={<PeopleIcon />} />
+        <BottomNavigationAction label="Rumah Sakit" icon={<LocalHospitalIcon />} />
+        <BottomNavigationAction label="Vaksin" icon={<LocationOnIcon />} />
+      </BottomNavigation>
     </div>
   );
 }

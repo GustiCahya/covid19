@@ -1,7 +1,25 @@
+.App{
+    display: grid;
+    @media (min-width: 800px) {
+        grid-template-columns: 30vw 1fr;
+    }
+}
 .sidebar{
     background: #eef1fa;
     padding: 20px 20px;
-    height: 100vh;
+    height: 100%;
+    transition: .1s ease-in-out;
+    position: fixed;
+    left: -100%;
+    @media (min-width: 800px) {
+        position: relative;
+        left: 0;
+    }
+    .search{
+        h2{
+            margin-top: 30px;
+        }
+    }
     .nearest-vaccine{
         .locations{
             color: #5f74cd;
@@ -38,9 +56,16 @@
     }
 }
 .main{
-    padding: 20px 50px;
+    padding: 10px 20px;
+    @media (min-width: 800px) {
+        padding: 20px 50px;
+    }
     .header{
-        padding: 40px 0;
+        padding: 30px 0;
+        display: none;
+        @media (min-width: 800px) {
+            display: block;
+        }
         ul{
             display: flex;
             margin: 0;
@@ -66,8 +91,12 @@
     // spreading-virus component
     .box{
         background: #eef1fa;
-        padding: 40px 30px;
+        padding: 30px;
         border-radius: 3px;
+        margin-top: 30px;
+        @media (min-width: 800px) {
+            margin-top: 0;
+        }
         h1{
             padding: 0;
             margin: 0;
@@ -118,5 +147,33 @@
         h1 > span{
             color: #5b83d8;
         }
+    }
+}
+.fab-search{
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    background-color: #23659b;
+    border-radius: 50%;
+    *{
+        color: white !important;
+    }
+    @media (min-width: 800px) {
+        display: none;        
+    }
+}
+.bottom-nav{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #23659b !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+    transition: .3s;
+    * { 
+        color: #fafafa !important;
+    }
+    @media (min-width: 800px) {
+        bottom: -50%;
     }
 }
