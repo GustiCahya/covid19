@@ -15,18 +15,23 @@
         position: relative;
         left: 0;
     }
+    .sticky {
+        position: sticky;
+        top: 40px;
+    }
     .search{
         h2{
             margin-top: 30px;
         }
     }
-    .nearest-vaccine{
+    .most-cases{
         .locations{
             color: #5f74cd;
         }
         .location{
             display: flex;
             align-items: center;
+            margin-bottom: 5px;
             .number{
                 display: inline-block;
                 padding: 10px;
