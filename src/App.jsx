@@ -1,99 +1,82 @@
-import React from 'react';
-import './App.scss';
-import axios from 'axios';
+import React from "react";
+import "./App.scss";
+import axios from "axios";
 
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SearchIcon from "@material-ui/icons/Search";
 
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import BottomNavigation from "@material-ui/core/BottomNavigation";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import PeopleIcon from '@material-ui/icons/People';
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
-import IconButton from '@material-ui/core/IconButton';
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import PeopleIcon from "@material-ui/icons/People";
+import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
+import IconButton from "@material-ui/core/IconButton";
 
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import SpreadingVirus from './pages/SpreadingVirus';
-
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import SpreadingVirus from "@pages/SpreadingVirus";
+import Hospitals from "@pages/Hospitals";
+import Vaccines from "@pages/Vaccines";
 
 function App() {
   // View
-  const matches = useMediaQuery('(min-width:800px)');
-  const [bottomNav, setBottomNav] = React.useState();
+  const matches = useMediaQuery("(min-width:800px)");
+  const [nav, setNav] = React.useState(0);
+  React.useEffect(() => {
+    
+  },[]);
   const [openSidebar, setOpenSidebar] = React.useState(matches);
   React.useEffect(() => {
     setOpenSidebar(matches);
   }, [matches]);
-  // Fetch Data
-  // Country
-  const [country, setCountry] = React.useState();
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        'http://localhost:1234/indonesia',
-        );
-        setCountry(result.data[0]);
-      };
-      fetchData();
-    }, []);
-  // Provinces
+
+  // Province
   const [provinces, setProvinces] = React.useState([]);
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        'http://localhost:1234/indonesia/provinces',
-      );
-      let data = result.data.map((item) => {
-        return {
-        _id: item.attributes.FID,
-        provinsi: item.attributes.Provinsi,
-        positif: item.attributes.Kasus_Posi,
-        dirawat: item.attributes.Kasus_Posi - (item.attributes.Kasus_Semb + item.attributes.Kasus_Meni),
-        sembuh: item.attributes.Kasus_Semb,
-        meninggal: item.attributes.Kasus_Meni
-      }});
-      setProvinces(data);
-      setDisplayProvinces(data);
-    };
-    fetchData();
-  }, []);
-  // Updated Data
-  const [updatedData, setUpdatedData] = React.useState();
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        'http://localhost:1234/indonesia/updatedData',
-      );
-      let data = result.data;
-      setUpdatedData(data);
-    };
-    fetchData();
-  }, []);
-  // Search Province
-  const [displayProvinces, setDisplayProvinces] = React.useState();
+  const [tableRef, setTableRef] = React.useState(null);
+  const [displayProvinces, setDisplayProvinces] = React.useState([]);
   const searchProvince = (e) => {
     const value = e.target.value;
     const valReg = new RegExp(value, "gi");
-    const filteredProvinces = provinces?.filter(item => {
+    const filteredProvinces = provinces?.filter((item) => {
       return item?.provinsi?.match(valReg);
     });
     setDisplayProvinces(filteredProvinces);
-  }
-  let tableRef = React.useRef(null);
+  };
+  React.useEffect(() => {
+    setDisplayProvinces(() => provinces);
+  }, [provinces]);
   const searchOnFocus = () => {
     tableRef.current.scrollIntoView();
-  }
+  };
+
+  // Hospitals
+  const [hospitals, setHospitals] = React.useState([]);
+  const [displayHospitals, setDisplayHospitals] = React.useState([]);
+  const searchHospitals = (e) => {
+    const value = e.target.value;
+    const valReg = new RegExp(value, "gi");
+    const filteredProvinces = provinces?.filter((item) => {
+      return item?.provinsi?.match(valReg);
+    });
+    setDisplayHospitals(filteredProvinces);
+  };
+  React.useEffect(() => {
+    setDisplayHospitals(() => provinces);
+  }, [provinces]);
+
   return (
     <div className="App">
-      <div className="sidebar" style={openSidebar ? {left: '0'} : {left: '-100%'}}>
+      <div
+        className="sidebar"
+        style={openSidebar ? { left: "0" } : { left: "-100%" }}
+      >
         <div className="sticky">
           <div className="search">
-            <h2>Cari Provinsi</h2>
+            <h2>{}</h2>
             <TextField
               id="search"
-              placeholder="Cari"
+              placeholder={}
               onChange={searchProvince}
               onFocus={searchOnFocus}
               InputProps={{
@@ -108,59 +91,115 @@ function App() {
           <div className="most-cases">
             <h2>Kasus Terbanyak</h2>
             <div className="locations">
-              {
-                [].concat(provinces).splice(0,3).map((item, index) => (
+              {[]
+                .concat(provinces)
+                .splice(0, 3)
+                .map((item, index) => (
                   <div className="location">
-                    <div className="number">{index+1}</div>
+                    <div className="number">{index + 1}</div>
                     <div className="item">
                       <span className="title">{item.provinsi}</span>
                       <span className="sub">{item.positif}</span>
                     </div>
                   </div>
-                ))
-              }
+                ))}
             </div>
           </div>
         </div>
       </div>
       <div className="main">
         <div className="header">
-            <ul>
-              <li><a className="selected" href="/">Dashboard</a></li>
-              <li><a href="/">Rumah Sakit</a></li>
-              <li><a href="/">Vaksin</a></li>
-            </ul>
+          <ul>
+            <li>
+              <a
+                className={nav === 0 ? "selected" : ""}
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNav(0);
+                }}
+              >
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a
+                className={nav === 1 ? "selected" : ""}
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNav(1);
+                }}
+              >
+                Rumah Sakit
+              </a>
+            </li>
+            <li>
+              <a
+                className={nav === 2 ? "selected" : ""}
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNav(2);
+                }}
+              >
+                Vaksin
+              </a>
+            </li>
+          </ul>
         </div>
         <div className="content">
-          <SpreadingVirus
-            country={country}
-            updatedDataCovid={updatedData}
-            displayProvinces={displayProvinces}
-            tableRef={tableRef}
-          />
+          {
+            (nav === 0)
+            ? <SpreadingVirus
+                displayProvinces={displayProvinces}
+                getProvinces={(provinces) => {
+                  setProvinces(provinces);
+                }}
+                getTableRef={(tableRef) => {
+                  setTableRef(tableRef);
+                }}
+              />
+            : (nav === 1)
+            ? <Hospitals
+                displayHospitals={displayHospitals}
+                getHospitals={(hospitals) => {
+                  setHospitals(hospitals);
+                }}
+              />
+            : (nav === 2)
+            ? <Vaccines />
+            : null
+          }
         </div>
       </div>
       <div className="fab-search">
-        <IconButton 
-          color="primary" 
+        <IconButton
+          color="primary"
           aria-label="search"
           onClick={() => {
-            setOpenSidebar((prevItem) => !prevItem)
+            setOpenSidebar((prevItem) => !prevItem);
           }}
         >
           <SearchIcon />
         </IconButton>
       </div>
       <BottomNavigation
-        value={bottomNav}
+        value={nav}
         onChange={(event, newValue) => {
-          setBottomNav(newValue);
+          setNav(newValue);
         }}
         showLabels
         className="bottom-nav"
       >
-        <BottomNavigationAction label="Penyebaran Virus" icon={<PeopleIcon />} />
-        <BottomNavigationAction label="Rumah Sakit" icon={<LocalHospitalIcon />} />
+        <BottomNavigationAction
+          label="Penyebaran Virus"
+          icon={<PeopleIcon />}
+        />
+        <BottomNavigationAction
+          label="Rumah Sakit"
+          icon={<LocalHospitalIcon />}
+        />
         <BottomNavigationAction label="Vaksin" icon={<LocationOnIcon />} />
       </BottomNavigation>
     </div>

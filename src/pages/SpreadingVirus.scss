@@ -1,0 +1,56 @@
+// spreading-virus component
+.box{
+    background: #eef1fa;
+    padding: 30px;
+    border-radius: 3px;
+    h1{
+        padding: 0;
+        margin: 0;
+        margin-bottom: 3px;
+    }
+    h1 > span{
+        color: #5b83d8;
+    }
+    .desc_head{
+        display: flex;
+    }
+    .desc_head > .item{
+        color: #646770;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        margin-right: 16px;
+        .icon{
+            font-size: 15px;
+            margin-right: 5px;
+        }
+    }
+    h2{
+        font-size: 4em;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+    .desc_foot{
+        ul{
+            display: flex;
+            justify-content: space-around;
+            margin: 0;
+            padding: 0;
+        }
+        ul > li{
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .value{
+                font-weight: bold;
+            }
+        }
+    }
+}
+.spreading-list{
+    h1 > span{
+        color: #5b83d8;
+    }
+}

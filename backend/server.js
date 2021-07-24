@@ -41,6 +41,18 @@ app.get("/indonesia/updatedData", async (req, res) => {
   }
 });
 
+app.get("/indonesia/hospitals", async (req, res) => {
+  try {
+    const result = await fetch(
+      "https://dekontaminasi.com/api/id/covid19/hospitals"
+    );
+    const item = await result.json();
+    res.json(item);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.listen(1234, function () {
   console.log("listening on 1234");
 });

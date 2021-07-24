@@ -1,4 +1,6 @@
 import React from "react";
+import "./SpreadingVirus.scss";
+import axios from 'axios';
 
 import addSeparator from "@utils/addSeparator";
 
@@ -15,7 +17,61 @@ import CloudQueueIcon from '@material-ui/icons/CloudQueue';
 
 import convertCommaToDot from '@utils/convertCommaToDot';
 
-export default function SpreadingVirus({country, updatedDataCovid: updatedData, displayProvinces, tableRef}) {
+export default function SpreadingVirus({displayProvinces, getProvinces, getTableRef}) {
+  //! Logic for Spreading Virus Page
+  // Ref
+  let tableRef = React.useRef(null);
+  console.log(displayProvinces);
+  // Country
+  const [country, setCountry] = React.useState();
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        'http://localhost:1234/indonesia',
+        );
+        setCountry(result.data[0]);
+      };
+      fetchData();
+    }, []);
+  // Provinces
+  const [provinces, setProvinces] = React.useState([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        'http://localhost:1234/indonesia/provinces',
+      );
+      let data = result.data.map((item) => {
+        return {
+        _id: item.attributes.FID,
+        provinsi: item.attributes.Provinsi,
+        positif: item.attributes.Kasus_Posi,
+        dirawat: item.attributes.Kasus_Posi - (item.attributes.Kasus_Semb + item.attributes.Kasus_Meni),
+        sembuh: item.attributes.Kasus_Semb,
+        meninggal: item.attributes.Kasus_Meni
+      }});
+      setProvinces(data);
+    };
+    fetchData();
+  }, []);
+  // Updated Data
+  const [updatedData, setUpdatedData] = React.useState();
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        'http://localhost:1234/indonesia/updatedData',
+      );
+      let data = result.data;
+      setUpdatedData(data);
+    };
+    fetchData();
+  }, []);
+  // get
+  React.useEffect(() => {
+    getProvinces(provinces)
+  }, [provinces, getProvinces]);
+  React.useEffect(() => {
+    getTableRef(tableRef)
+  }, [tableRef, getTableRef]);
   return (
     <div className="spreading-virus">
       <div className="box">
