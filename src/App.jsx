@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.scss';
+import axios from 'axios';
 
 import addSeparator from "@utils/addSeparator";
 
@@ -28,6 +29,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import IconButton from '@material-ui/core/IconButton';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import convertCommaToDot from './utils/convertCommaToDot';
 
 function App() {
   // View
@@ -38,19 +40,34 @@ function App() {
     setOpenSidebar(matches);
   }, [matches]);
   // Logic
-  const [country, setCountry] = React.useState({});
+  const [country, setCountry] = React.useState();
+  const [provinces, setProvinces] = React.useState();
   React.useEffect(() => {
-    async function fetchData(){
-      let data = {
-        positif: "",
-        dirawat: "",
-        meninggal: "",
-        sembuh: ""
-      }
-      const response = await fetch("https://api.kawalcorona.com/indonesia/");
-      data = await response.json();
-      setCountry(data);
-    }
+    const fetchData = async () => {
+      const result = await axios(
+        'http://localhost:1234/indonesia',
+      );
+      setCountry(result.data[0]);
+    };
+    fetchData();
+  }, []);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        'http://localhost:1234/indonesia/provinces',
+      );
+      let data = result.data.map((item) => {
+        return {
+        _id: item.attributes.FID,
+        provinsi: item.attributes.Provinsi,
+        positif: item.attributes.Kasus_Posi,
+        dirawat: item.attributes.Kasus_Posi - (item.attributes.Kasus_Semb + item.attributes.Kasus_Meni),
+        sembuh: item.attributes.Kasus_Semb,
+        meninggal: item.attributes.Kasus_Meni
+      }});
+      console.log(data);
+      setProvinces(data);
+    };
     fetchData();
   }, []);
   return (
@@ -116,19 +133,19 @@ function App() {
                 <ul>
                   <li>
                     <span className="label">Terkonfirmasi</span>
-                    <span className="value">{addSeparator(country?.positif)} Orang</span>
+                    <span className="value">{convertCommaToDot(country?.positif)} Orang</span>
                   </li>
                   <li>
                     <span className="label">Perawatan</span>
-                    <span className="value">{addSeparator(country?.dirawat)} Orang</span>
+                    <span className="value">{convertCommaToDot(country?.dirawat)} Orang</span>
                   </li>
                   <li>
                     <span className="label">Sembuh</span>
-                    <span className="value" style={{color:"#4f8d6d"}}>{addSeparator(country?.sembuh)} Orang</span>
+                    <span className="value" style={{color:"#4f8d6d"}}>{convertCommaToDot(country?.sembuh)} Orang</span>
                   </li>
                   <li>
                     <span className="label">Meninggal</span>
-                    <span className="value" style={{color:"#c9515b"}}>{addSeparator(country?.meninggal)} Orang</span>
+                    <span className="value" style={{color:"#c9515b"}}>{convertCommaToDot(country?.meninggal)} Orang</span>
                   </li>
                 </ul>
               </div>
@@ -148,16 +165,20 @@ function App() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow key="row.name">
-                      <TableCell component="th" scope="row">
-                        1.
-                      </TableCell>
-                      <TableCell align="left">Jakarta</TableCell>
-                      <TableCell align="center">{addSeparator(1000)}</TableCell>
-                      <TableCell align="center">{addSeparator(1000)}</TableCell>
-                      <TableCell align="center">{addSeparator(1000)}</TableCell>
-                      <TableCell align="center">{addSeparator(1000)}</TableCell>
-                    </TableRow>
+                    {
+                      provinces?.map((province, index) => (
+                        <TableRow key={province._id}>
+                          <TableCell component="th" scope="row">
+                            {index+1}.
+                          </TableCell>
+                          <TableCell align="left">{province.provinsi}</TableCell>
+                          <TableCell align="center">{addSeparator(province.positif)}</TableCell>
+                          <TableCell align="center">{addSeparator(province.dirawat)}</TableCell>
+                          <TableCell align="center" style={{color:"#4f8d6d"}}>{addSeparator(province.sembuh)}</TableCell>
+                          <TableCell align="center" style={{color:"#c9515b"}}>{addSeparator(province.meninggal)}</TableCell>
+                        </TableRow>
+                      ))
+                    }
                   </TableBody>
                 </Table>
               </TableContainer>

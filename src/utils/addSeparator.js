@@ -1,4 +1,4 @@
-export default function addSeparator(num: any){
+export default function addSeparator(num){
 	num = Number(num);
 	num = Math.round(num);
 	return (num).toLocaleString("id", {
