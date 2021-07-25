@@ -1,0 +1,6 @@
+{
+  "appId": "com.penyebaran.covid19",
+  "appName": "covid19",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}

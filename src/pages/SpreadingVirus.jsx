@@ -1,6 +1,7 @@
 import React from "react";
 import "./SpreadingVirus.scss";
 import axios from 'axios';
+import dateFormat from 'dateformat';
 
 import addSeparator from "@utils/addSeparator";
 import convertCommaToDot from '@utils/convertCommaToDot';
@@ -81,7 +82,7 @@ export default function SpreadingVirus({displayProvinces, getProvinces, getTable
           <span className="item">
             <QueryBuilderIcon className="icon" />
             <span className="text">
-              Update terakhir {updatedData?.penambahan?.created}
+              Update terakhir {dateFormat(updatedData?.penambahan?.created, "dd/mm/yyyy hh:MM:ss")}
             </span>
           </span>
           <span className="item">
@@ -95,37 +96,69 @@ export default function SpreadingVirus({displayProvinces, getProvinces, getTable
             <li>
               <span className="label">Terkonfirmasi</span>
               <span className="value">
-                {convertCommaToDot(country?.positif)} Orang
+                {
+                  country?.positif 
+                  ? `${convertCommaToDot(country?.positif)} Orang`
+                  : `Loading...`
+                }
               </span>
               <sup style={{ color: "gray" }}>
-                +{addSeparator(updatedData?.penambahan?.jumlah_positif)}
+                {
+                  updatedData?.penambahan?.jumlah_positif
+                  ? `+${addSeparator(updatedData?.penambahan?.jumlah_positif)}`
+                  : `Loading...`
+                }
               </sup>
             </li>
             <li>
               <span className="label">Perawatan</span>
               <span className="value">
-                {convertCommaToDot(country?.dirawat)} Orang
+                {
+                  country?.dirawat 
+                  ? `${convertCommaToDot(country?.dirawat)} Orang`
+                  : `Loading...`
+                }
               </span>
               <sup style={{ color: "gray" }}>
-                +{addSeparator(updatedData?.penambahan?.jumlah_meninggal)}
+                {
+                  updatedData?.penambahan?.jumlah_dirawat
+                  ? `+${addSeparator(updatedData?.penambahan?.jumlah_dirawat)}`
+                  : `Loading...`
+                }
               </sup>
             </li>
             <li>
               <span className="label">Sembuh</span>
               <span className="value" style={{ color: "#4f8d6d" }}>
-                {convertCommaToDot(country?.sembuh)} Orang
+                {
+                  country?.sembuh 
+                  ? `${convertCommaToDot(country?.sembuh)} Orang`
+                  : `Loading...`
+                }
               </span>
               <sup style={{ color: "gray" }}>
-                +{addSeparator(updatedData?.penambahan?.jumlah_sembuh)}
+                {
+                  updatedData?.penambahan?.jumlah_sembuh
+                  ? `+${addSeparator(updatedData?.penambahan?.jumlah_sembuh)}`
+                  : `Loading...`
+                }
               </sup>
             </li>
             <li>
               <span className="label">Meninggal</span>
               <span className="value" style={{ color: "#c9515b" }}>
-                {convertCommaToDot(country?.meninggal)} Orang
+                {
+                  country?.meninggal 
+                  ? `${convertCommaToDot(country?.meninggal)} Orang`
+                  : `Loading...`
+                }
               </span>
               <sup style={{ color: "gray" }}>
-                +{addSeparator(updatedData?.penambahan?.jumlah_dirawat)}
+                {
+                  updatedData?.penambahan?.jumlah_meninggal
+                  ? `+${addSeparator(updatedData?.penambahan?.jumlah_meninggal)}`
+                  : `Loading...`
+                }
               </sup>
             </li>
           </ul>

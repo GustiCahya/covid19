@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import "./Vaccines.scss";
+import dateFormat from "dateformat";
 import { firestore } from "@services/firebase";
 import serialize from "form-serialize";
 
@@ -41,7 +42,7 @@ export default function Vaccines() {
           <span className="item">
             <QueryBuilderIcon className="icon" />
             <span className="text">
-              Update terakhir {item?.lastUpdate}
+              Update terakhir {dateFormat(item?.lastUpdate, "dd/mm/yyyy hh:MM:ss")}
             </span>
           </span>
           <span className="item">
@@ -75,7 +76,7 @@ export default function Vaccines() {
           <label>Nomor Telepon :</label>
           <input type="text" name="nomor telepon" />
         </div>
-        <Button type="submit" variant="contained" color="primary" style={{marginTop: "20px"}}>Submit</Button>
+        <Button type="submit" variant="contained" color="primary" style={{marginTop: "20px", zIndex: -1}}>Submit</Button>
       </form>
     </div>
   );
